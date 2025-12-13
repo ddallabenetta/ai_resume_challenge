@@ -157,7 +157,11 @@ export default function OnboardingPage() {
 
   return (
     <div className="min-h-screen bg-black text-white p-6">
-      <div className="max-w-2xl mx-auto space-y-8">
+      <div
+        className={`mx-auto space-y-8 transition-all duration-500 ease-in-out ${
+          step === "interview" ? "max-w-[95vw] lg:max-w-7xl" : "max-w-2xl"
+        }`}
+      >
         <div className="space-y-2">
           <div className="flex justify-between text-sm text-gray-400 uppercase tracking-wider">
             <span>Setup Progress</span>

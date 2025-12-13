@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import {
   Mic,
   Send,
@@ -168,7 +168,7 @@ export function InterviewChat({ onInterviewComplete }: InterviewChatProps) {
   };
 
   return (
-    <div className="flex h-[80vh] lg:h-[600px] w-full max-w-5xl mx-auto rounded-xl border border-gray-800 bg-black overflow-hidden shadow-2xl flex-col lg:flex-row">
+    <div className="flex h-[80vh] w-full mx-auto rounded-xl border border-gray-800 bg-black overflow-hidden shadow-2xl flex-col lg:flex-row">
       {/* LEFT COLUMN: CHAT */}
       <div className="flex-1 flex flex-col border-r-0 lg:border-r border-gray-800 h-full">
         {/* Header */}
@@ -223,17 +223,25 @@ export function InterviewChat({ onInterviewComplete }: InterviewChatProps) {
 
         {/* Input */}
         <div className="p-4 bg-gray-900/30 border-t border-gray-800 shrink-0">
-          <form onSubmit={handleSubmit} className="flex gap-2">
-            <Input
+          <form onSubmit={handleSubmit} className="flex gap-2 items-end">
+            <Textarea
               value={input}
-              onChange={(e) => setInput(e.target.value)}
+              onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
+                setInput(e.target.value)
+              }
               placeholder="Scrivi la tua risposta..."
-              className="bg-black/50 border-gray-700 text-white focus:ring-purple-500"
+              className="bg-black/50 border-gray-700 text-white focus:ring-purple-500 min-h-[44px] max-h-[120px] resize-none"
+              onKeyDown={(e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+                if (e.key === "Enter" && !e.shiftKey) {
+                  e.preventDefault();
+                  handleSubmit();
+                }
+              }}
             />
             <Button
               type="submit"
               disabled={isLoading || !input.trim()}
-              className="bg-white text-black hover:bg-gray-200"
+              className="bg-white text-black hover:bg-gray-200 h-[44px]"
             >
               <Send className="w-4 h-4" />
             </Button>

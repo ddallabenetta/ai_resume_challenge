@@ -13,50 +13,55 @@ export default function Home() {
       </div>
 
       <div className="relative z-10 container mx-auto px-4 py-20 flex flex-col items-center justify-center min-h-screen">
-        <div className="text-center max-w-3xl mx-auto space-y-8">
-          <div className="flex items-center justify-center space-x-2 mb-8">
-            <span className="px-3 py-1 rounded-full bg-white/10 border border-white/20 text-sm font-medium backdrop-blur-sm">
-              Mirror Vitae
-            </span>
+        <div className="text-center max-w-4xl mx-auto space-y-12">
+          <div className="space-y-6">
+            <h1 className="text-6xl md:text-8xl font-bold tracking-tighter pb-2">
+              <span className="bg-clip-text text-transparent bg-gradient-to-b from-white via-white to-gray-400">
+                Mirror
+              </span>{" "}
+              <span className="bg-clip-text text-transparent bg-gradient-to-br from-purple-400 via-violet-500 to-purple-600">
+                Vitae
+              </span>
+            </h1>
+
+            <p className="text-2xl md:text-3xl font-light text-gray-300 max-w-2xl mx-auto leading-relaxed">
+              Il tuo Gemello Digitale, <br className="md:hidden" /> elevato
+              dall'AI.
+            </p>
+
+            <p className="text-lg text-gray-500 max-w-xl mx-auto">
+              Racconta la tua storia, condividi la tua voce e lasciati
+              rappresentare da un'intelligenza artificiale che impara da te.
+            </p>
           </div>
 
-          <h1 className="text-5xl md:text-7xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-br from-white via-white to-white/50 pb-2">
-            Crea il tuo <br />
-            <span className="text-purple-400">Gemello AI</span>
-          </h1>
-
-          <p className="text-xl md:text-2xl text-gray-400 leading-relaxed font-light">
-            Basta inviare portfolio statici. Crea un agente conversazionale che
-            parla con la tua voce, racconta le tue storie e ti rappresenta 24/7.
-          </p>
-
-          <div className="flex flex-col md:flex-row items-center justify-center gap-4 pt-8">
+          <div className="flex flex-col md:flex-row items-center justify-center gap-6 pt-8 animate-in slide-in-from-bottom-8 duration-1000 delay-200">
             <Link href="/onboarding">
               <Button
                 size="lg"
-                className="h-14 px-8 text-lg rounded-full bg-white text-black hover:bg-gray-200 transition-all font-semibold group"
+                className="h-16 px-10 text-xl rounded-full bg-white text-black hover:bg-gray-200 hover:scale-105 transition-all font-bold shadow-[0_0_40px_rgba(255,255,255,0.3)] group"
               >
-                Crea il mio Gemello
-                <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                Inizia Ora
+                <ArrowRight className="ml-3 w-6 h-6 group-hover:translate-x-1 transition-transform" />
               </Button>
             </Link>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-20 text-left">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 pt-24 text-left animate-in fade-in duration-1000 delay-500">
             <FeatureCard
-              icon={<Mic className="w-6 h-6 text-purple-400" />}
-              title="Voce Nativa"
-              description="Clona la tua voce così i visitatori possono parlare davvero con il tuo portfolio."
+              icon={<Mic className="w-8 h-8 text-purple-400" />}
+              title="Voce Autentica"
+              description="La tua voce clonata con precisione per un'esperienza conversazionale naturale e coinvolgente."
             />
             <FeatureCard
-              icon={<Sparkles className="w-6 h-6 text-blue-400" />}
-              title="Intelligente"
-              description="Potenziato da Claude 4.5 per rispondere a domande sulla tua esperienza."
+              icon={<Sparkles className="w-8 h-8 text-blue-400" />}
+              title="Intelligenza Reale"
+              description="Potenziato da modelli AI avanzati per comprendere il contesto e rispondere con la tua personalità."
             />
             <FeatureCard
-              icon={<User className="w-6 h-6 text-pink-400" />}
-              title="Personalizzato"
-              description="Genera un system prompt basato su un'intervista approfondita."
+              icon={<User className="w-8 h-8 text-pink-400" />}
+              title="Identità Unica"
+              description="Un profilo costruito sulle tue esperienze, competenze e storie personali."
             />
           </div>
         </div>
