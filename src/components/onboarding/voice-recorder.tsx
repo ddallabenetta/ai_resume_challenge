@@ -1,36 +1,34 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Mic, Square, Play, RotateCcw, Upload } from "lucide-react";
+import { Mic, Square, RotateCcw, Upload } from "lucide-react";
 
 interface VoiceRecorderProps {
   onRecordingComplete: (blob: Blob) => void;
 }
+
+const SCRIPTS = [
+  "Ciao, mi chiamo [Tuo Nome] e sono uno sviluppatore software. Amo creare soluzioni innovative.",
+  "Il successo non è la chiave della felicità. La felicità è la chiave del successo. Se ami ciò che fai, avrai successo.",
+  "Nel mezzo delle difficoltà nascono le opportunità. Sono sempre alla ricerca di nuove sfide professionali.",
+  "La logica ti porterà da A a B. L'immaginazione ti porterà ovunque. Questo è il mio approccio al design.",
+  "Non ho fallito. Ho scoperto 10.000 modi che non funzionano. La perseveranza è la mia forza più grande.",
+];
 
 export function VoiceRecorder({ onRecordingComplete }: VoiceRecorderProps) {
   const [isRecording, setIsRecording] = useState(false);
   const [recordingBlob, setRecordingBlob] = useState<Blob | null>(null);
   const [audioUrl, setAudioUrl] = useState<string | null>(null);
   const [timer, setTimer] = useState(0);
-  const [script, setScript] = useState("");
+  const [script] = useState(
+    () => SCRIPTS[Math.floor(Math.random() * SCRIPTS.length)]
+  );
 
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const chunksRef = useRef<BlobPart[]>([]);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
-
-  const SCRIPTS = [
-    "Ciao, mi chiamo [Tuo Nome] e sono uno sviluppatore software. Amo creare soluzioni innovative.",
-    "Il successo non è la chiave della felicità. La felicità è la chiave del successo. Se ami ciò che fai, avrai successo.",
-    "Nel mezzo delle difficoltà nascono le opportunità. Sono sempre alla ricerca di nuove sfide professionali.",
-    "La logica ti porterà da A a B. L'immaginazione ti porterà ovunque. Questo è il mio approccio al design.",
-    "Non ho fallito. Ho scoperto 10.000 modi che non funzionano. La perseveranza è la mia forza più grande.",
-  ];
-
-  useEffect(() => {
-    setScript(SCRIPTS[Math.floor(Math.random() * SCRIPTS.length)]);
-  }, []);
 
   const startRecording = async () => {
     try {
@@ -166,7 +164,9 @@ export function VoiceRecorder({ onRecordingComplete }: VoiceRecorderProps) {
           <p className="text-sm text-gray-500 mb-2 uppercase tracking-widest">
             Leggi questa frase
           </p>
-          <p className="text-lg text-white font-serif italic">"{script}"</p>
+          <p className="text-lg text-white font-serif italic">
+            &quot;{script}&quot;
+          </p>
         </div>
 
         <p className="text-xs text-center text-gray-500 max-w-xs">

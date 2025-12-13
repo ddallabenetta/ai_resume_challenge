@@ -14,24 +14,53 @@ import {
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 
-interface Message {
+export interface Message {
   id: string;
   role: "user" | "assistant";
   content: string;
-}
-
-interface InterviewState {
-  progress: number;
-  completed_topics: string[];
-  extracted_facts: string[];
-  is_complete: boolean;
 }
 
 interface InterviewChatProps {
   onInterviewComplete: (history: Message[]) => void;
 }
 
-const TOPICS_LIST = ["BACKGROUND", "SKILLS", "PROGETTI", "VALORI"];
+const TOPICS_LIST = [
+  "IDENTITÀ PROFESSIONALE",
+  "ESPERIENZA CHIAVE",
+  "ABILITÀ UNICHE",
+  "FALLIMENTO FORMATIVO",
+  "DIMENSIONE PERSONALE",
+  "VALORI & STILE",
+];
+
+interface ExtractedData {
+  identity: { role: string; passion: string; current_focus: string };
+  key_project: { name: string; challenge: string; pride_point: string };
+  unique_abilities: {
+    exceptional_at: string;
+    differentiator: string;
+    main_anti_skill: string;
+  };
+  formative_failure: { what: string; lesson: string };
+  personal_dimension: {
+    passions: string[];
+    hobbies: string[];
+    significant_travels: string[];
+  };
+  values_and_style: {
+    ideal_team: string;
+    work_style: string;
+    motivates: string;
+  };
+}
+
+interface InterviewState {
+  progress: number;
+  completed_topics: string[];
+  extracted_data: ExtractedData | null;
+  extracted_facts_display: string[]; // Computed for display
+  is_complete: boolean;
+}
 
 export function InterviewChat({ onInterviewComplete }: InterviewChatProps) {
   const [messages, setMessages] = useState<Message[]>([
@@ -39,13 +68,14 @@ export function InterviewChat({ onInterviewComplete }: InterviewChatProps) {
       id: "welcome",
       role: "assistant",
       content:
-        "Ciao! Sono Claude. Ti intervisterò per costruire il tuo gemello digitale. Iniziamo dal tuo background. Di cosa ti occupi attualmente?",
+        "Ciao! Sono Vitae. Ti intervisterò per costruire il tuo gemello digitale. Iniziamo dal tuo background. Di cosa ti occupi attualmente?",
     },
   ]);
   const [interviewState, setInterviewState] = useState<InterviewState>({
     progress: 0,
     completed_topics: [],
-    extracted_facts: [],
+    extracted_data: null,
+    extracted_facts_display: [],
     is_complete: false,
   });
 
@@ -67,6 +97,20 @@ export function InterviewChat({ onInterviewComplete }: InterviewChatProps) {
       }, 1500);
     }
   }, [interviewState.is_complete]);
+
+  const computeDisplayFacts = (data: ExtractedData): string[] => {
+    const facts: string[] = [];
+    if (data?.identity?.role) facts.push(data.identity.role);
+    if (data?.identity?.passion)
+      facts.push("Passione: " + data.identity.passion);
+    if (data?.unique_abilities?.exceptional_at)
+      facts.push("Superpotere: " + data.unique_abilities.exceptional_at);
+    if (data?.values_and_style?.work_style)
+      facts.push("Stile: " + data.values_and_style.work_style);
+    if (data?.personal_dimension?.passions?.length > 0)
+      facts.push("Interessi: " + data.personal_dimension.passions[0]);
+    return facts.slice(0, 6); // Limit to 6
+  };
 
   const handleSubmit = async (e?: React.FormEvent) => {
     e?.preventDefault();
@@ -102,10 +146,16 @@ export function InterviewChat({ onInterviewComplete }: InterviewChatProps) {
 
         // Update Interview State if present
         if (typeof data.progress === "number") {
+          const newData = data.extracted_data || interviewState.extracted_data;
           setInterviewState({
             progress: data.progress,
-            completed_topics: data.completed_topics || [],
-            extracted_facts: data.extracted_facts || [],
+            completed_topics: data.current_area
+              ? [...interviewState.completed_topics, data.current_area]
+              : interviewState.completed_topics, // Logic might be improved if API sends completed list
+            extracted_data: newData,
+            extracted_facts_display: newData
+              ? computeDisplayFacts(newData)
+              : [],
             is_complete: data.is_complete || false,
           });
         }
@@ -125,9 +175,7 @@ export function InterviewChat({ onInterviewComplete }: InterviewChatProps) {
         <div className="p-4 border-b border-gray-800 bg-gray-900/50 flex justify-between items-center">
           <div className="flex items-center gap-2">
             <Sparkles className="w-5 h-5 text-purple-400" />
-            <span className="font-medium text-white">
-              Interview with Claude
-            </span>
+            <span className="font-medium text-white">Interview with Vitae</span>
           </div>
         </div>
 
@@ -242,12 +290,12 @@ export function InterviewChat({ onInterviewComplete }: InterviewChatProps) {
           </div>
 
           <div className="flex flex-wrap gap-2">
-            {interviewState.extracted_facts.length === 0 && (
+            {interviewState.extracted_facts_display.length === 0 && (
               <p className="text-xs text-gray-600 italic">
                 In attesa di dati...
               </p>
             )}
-            {interviewState.extracted_facts.map((fact, i) => (
+            {interviewState.extracted_facts_display.map((fact, i) => (
               <Badge
                 key={i}
                 variant="secondary"
