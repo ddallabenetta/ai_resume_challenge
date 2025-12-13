@@ -38,10 +38,19 @@ export default function OnboardingPage() {
     setProgress(30);
   };
 
-  const handleVoiceComplete = async (blob: Blob) => {
+  const handleVoiceComplete = async (result: Blob | string) => {
+    // Case 1: Default Voice Selected (ID string)
+    if (typeof result === "string") {
+      setVoiceId(result);
+      setStep("photo");
+      setProgress(50);
+      return;
+    }
+
+    // Case 2: Voice Cloning (Blob)
     setIsProcessing(true);
     const formData = new FormData();
-    formData.append("file", blob);
+    formData.append("file", result);
 
     try {
       const res = await fetch("/api/onboarding/voice", {
