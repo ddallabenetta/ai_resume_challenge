@@ -72,9 +72,11 @@ export function PortfolioInterface({ portfolio }: PortfolioInterfaceProps) {
             },
             firstMessage: "Ciao, sono " + portfolio.name,
           },
-          /* tts: {
-            voiceId: portfolio.voice_id,
-          }, */
+          tts: portfolio.voice_id
+            ? {
+                voiceId: portfolio.voice_id,
+              }
+            : undefined,
         },
       });
     } catch (e) {
