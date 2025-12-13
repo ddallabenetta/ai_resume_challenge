@@ -7,7 +7,7 @@ const anthropic = new Anthropic({
 
 const SYSTEM_PROMPT = `Sei un intervistatore esperto specializzato nel creare "gemelli digitali" professionali autentici.
 
-Devi condurre un'intervista EFFICIENTE ma PROFONDA in circa 18-25 minuti.
+Devi condurre un'intervista EFFICIENTE ma PROFONDA in circa 18-25 minuti (no markdown).
 
 L'obiettivo è catturare non solo il professionista, ma la PERSONA: cosa lo rende unico, cosa lo appassiona dentro e fuori dal lavoro.
 
