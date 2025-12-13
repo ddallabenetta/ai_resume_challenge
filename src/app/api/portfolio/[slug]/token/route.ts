@@ -22,8 +22,6 @@ export async function GET(req: Request, { params }: { params: Promise<{ slug: st
 
         const client = new ElevenLabsClient({ apiKey });
 
-        console.log(portfolio.system_prompt);
-
         const { signed_url } = await client.conversationalAi.getSignedUrl({
             agent_id: agentId,
         });

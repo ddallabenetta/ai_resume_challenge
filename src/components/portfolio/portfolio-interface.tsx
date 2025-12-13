@@ -15,6 +15,7 @@ import {
 import { useConversation } from "@elevenlabs/react";
 import { format } from "date-fns";
 import { it } from "date-fns/locale";
+import { useAudioVisualizer } from "@/hooks/use-audio-visualizer";
 
 interface PortfolioInterfaceProps {
   portfolio: any;
@@ -45,6 +46,9 @@ export function PortfolioInterface({ portfolio }: PortfolioInterfaceProps) {
       setError("Errore connessione voce");
     },
   });
+
+  // Dynamic volume simulation
+  const volume = useAudioVisualizer(conversation.isSpeaking);
 
   // Auto-scroll to bottom of chat
   useEffect(() => {
@@ -262,7 +266,7 @@ export function PortfolioInterface({ portfolio }: PortfolioInterfaceProps) {
           })}
         </div>
 
-        {/* CSS Animations */}
+        {/* Global CSS for Animations */}
         <style jsx global>{`
           @keyframes float-random-1 {
             0%,
@@ -297,24 +301,59 @@ export function PortfolioInterface({ portfolio }: PortfolioInterfaceProps) {
               transform: translate(0, -20px);
             }
           }
+          /* TALKING ANIMATION */
+          @keyframes speak-pulse {
+            0% {
+              transform: scale(1);
+              filter: brightness(1);
+            }
+            50% {
+              transform: scale(1.03);
+              filter: brightness(1.1);
+            }
+            100% {
+              transform: scale(1);
+              filter: brightness(1);
+            }
+          }
+          .animate-speaking {
+            animation: speak-pulse 0.4s ease-in-out infinite;
+          }
+          .speaking-glow {
+            animation: glow-pulse 1.5s ease-in-out infinite alternate;
+          }
+          @keyframes glow-pulse {
+            from {
+              box-shadow: 0 0 20px rgba(168, 85, 247, 0.3);
+              opacity: 0.5;
+            }
+            to {
+              box-shadow: 0 0 60px rgba(168, 85, 247, 0.8);
+              opacity: 1;
+            }
+          }
         `}</style>
 
         {/* Avatar Area */}
         <div className="relative w-48 h-48 md:w-80 md:h-80 mx-auto z-10 mb-8">
           {/* Active Speaker Glow */}
           <div
-            className={`absolute inset-0 rounded-full bg-purple-500/30 blur-[60px] transition-opacity duration-300`}
+            className={`absolute inset-0 rounded-full bg-purple-500/30 blur-[60px] transition-all duration-75`}
             style={{
-              opacity: conversation.isSpeaking ? 1 : 0.2,
+              opacity: conversation.isSpeaking ? 0.5 + volume * 0.8 : 0.2, // More range
+              transform: `scale(${1 + volume * 0.5})`, // Much bigger glow expansion
             }}
           />
 
           <div
-            className={`relative w-full h-full rounded-full border-2 border-white/10 overflow-hidden shadow-2xl transition-transform duration-300 ${
-              conversation.isSpeaking
-                ? "scale-105 border-purple-500/50"
-                : "scale-100"
-            }`}
+            className={`relative w-full h-full rounded-full border-2 border-white/10 overflow-hidden shadow-2xl transition-all duration-75`}
+            style={{
+              transform: `scale(${1 + volume * 0.15})`, // Increased bounce (from 0.05 to 0.15)
+              borderColor: conversation.isSpeaking
+                ? `rgba(168,85,247, ${0.6 + volume * 0.6})`
+                : "rgba(255,255,255,0.1)",
+              filter: `brightness(${1 + volume * 0.3})`, // Increased brightness flare
+            }}
           >
             <img
               src={portfolio.photo_url}
@@ -328,7 +367,10 @@ export function PortfolioInterface({ portfolio }: PortfolioInterfaceProps) {
             <div className="absolute inset-0 -m-2 rounded-full border-2 border-yellow-500/50 animate-spin-slow" />
           )}
           {isConnected && (
-            <div className="absolute inset-0 -m-2 rounded-full border-2 border-purple-500/30 shadow-[0_0_20px_rgba(168,85,247,0.3)]" />
+            <div
+              className="absolute inset-0 -m-2 rounded-full border-2 border-purple-500/30 shadow-[0_0_20px_rgba(168,85,247,0.3)] transition-opacity duration-300"
+              style={{ opacity: conversation.isSpeaking ? 1 : 0.3 }}
+            />
           )}
         </div>
 
