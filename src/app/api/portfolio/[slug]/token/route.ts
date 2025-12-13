@@ -26,15 +26,7 @@ export async function GET(req: Request, { params }: { params: Promise<{ slug: st
 
         const { signed_url } = await client.conversationalAi.getSignedUrl({
             agent_id: agentId,
-            conversation_config_override: {
-                system_prompt: {
-                    prompt: portfolio.system_prompt
-                },
-                tts: {
-                    voice_id: portfolio.voice_id
-                }
-            },
-        } as any);
+        });
 
         return NextResponse.json({ signedUrl: signed_url });
 

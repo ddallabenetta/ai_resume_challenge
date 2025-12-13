@@ -65,6 +65,16 @@ export function PortfolioInterface({ portfolio }: PortfolioInterfaceProps) {
 
       await conversation.startSession({
         signedUrl: data.signedUrl,
+        overrides: {
+          agent: {
+            prompt: {
+              prompt: portfolio.system_prompt,
+            },
+          },
+          tts: {
+            voiceId: portfolio.voice_id,
+          },
+        },
       });
     } catch (e) {
       console.error(e);
