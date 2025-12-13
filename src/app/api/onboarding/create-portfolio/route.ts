@@ -5,18 +5,21 @@ import { v4 as uuidv4 } from 'uuid';
 export async function POST(req: Request) {
     try {
         const body = await req.json();
-        const { name, system_prompt, history, photo_url, voice_id, birthDate, city, socials } = body;
+        const { name, system_prompt, history, photo_url, voice_id, birthDate, city, socials, traits } = body;
 
-        // Generate slug from name
-        const slug = name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') || 'user-' + Date.now();
+        // Generate unique ID for the portfolio
+        const uniqueId = uuidv4();
+        // Use ID as slug to ensure uniqueness and avoid homonyms
+        const slug = uniqueId;
 
         const portfolio = {
-            id: uuidv4(),
+            id: uniqueId,
             slug,
             name,
             birthDate,
             city,
             socials,
+            traits: traits || [], // Save traits
             photo_url: photo_url || '/placeholder-avatar.png',
             voice_id: voice_id || 'default', // Fallback
             system_prompt,

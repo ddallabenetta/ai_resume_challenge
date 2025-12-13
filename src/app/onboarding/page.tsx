@@ -100,7 +100,10 @@ export default function OnboardingPage() {
       // We might still want to extract professional traits or refine the system prompt based on interview
       const promptRes = await fetch("/api/onboarding/generate-prompt", {
         method: "POST",
-        body: JSON.stringify({ history }),
+        body: JSON.stringify({
+          history,
+          personalInfo: personalInfo || {},
+        }),
       });
       const promptData = await promptRes.json();
 
@@ -113,6 +116,7 @@ export default function OnboardingPage() {
           city: personalInfo?.city,
           socials: personalInfo?.socials,
           system_prompt: promptData.system_prompt,
+          traits: promptData.traits,
           history,
           voice_id: voiceId,
           photo_url: photoUrl,
