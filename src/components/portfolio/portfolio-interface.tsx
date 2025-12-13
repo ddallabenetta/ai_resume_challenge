@@ -70,6 +70,7 @@ export function PortfolioInterface({ portfolio }: PortfolioInterfaceProps) {
             prompt: {
               prompt: portfolio.system_prompt,
             },
+            firstMessage: "Ciao, sono " + portfolio.name,
           },
           /* tts: {
             voiceId: portfolio.voice_id,
