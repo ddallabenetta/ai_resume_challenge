@@ -191,9 +191,8 @@ export function PortfolioInterface({ portfolio }: PortfolioInterfaceProps) {
 
       {/* RIGHT SIDE: Avatar & Interaction */}
       <div className="flex-1 relative flex flex-col items-center justify-center p-4">
-        {/* Floating Traits Animation Container */}
-        {/* Floating Traits Animation Container */}
-        <div className="absolute inset-0 pointer-events-none overflow-hidden z-0">
+        {/* Floating Traits Animation Container (Desktop Only) */}
+        <div className="absolute inset-0 pointer-events-none overflow-hidden z-0 hidden md:block">
           {/* Limit traits to available positions to strictly prevent overlap */}
           {traits.slice(0, 15).map((trait: string, i: number) => {
             // Carefully mapped 15 zones to avoid:
@@ -202,26 +201,27 @@ export function PortfolioInterface({ portfolio }: PortfolioInterfaceProps) {
             // 3. Each other (Spread out)
             const positions = [
               // --- TOP ZONE ---
-              { top: 8, left: 10, size: "lg" }, // Top-Left (Prominent)
-              { top: 12, left: 85, size: "lg" }, // Top-Right (Prominent)
-              { top: 5, left: 50, size: "sm" }, // Top-Center (High)
-              { top: 22, left: 20, size: "md" }, // Upper-Left-Inner
-              { top: 18, left: 70, size: "md" }, // Upper-Right-Inner
+              { top: 8, left: 10, size: "lg", mobileHidden: false }, // Top-Left (Prominent)
+              { top: 12, left: 85, size: "lg", mobileHidden: false }, // Top-Right (Prominent)
+              { top: 5, left: 50, size: "sm", mobileHidden: true }, // Top-Center (High) - Hidden on mobile
+              { top: 22, left: 20, size: "md", mobileHidden: true }, // Upper-Left-Inner - Hidden on mobile
+              { top: 18, left: 70, size: "md", mobileHidden: true }, // Upper-Right-Inner - Hidden on mobile
 
               // --- MIDDLE ZONES (Flanking Avatar) ---
-              { top: 35, left: 5, size: "sm" }, // Mid-High-Left (Edge)
-              { top: 38, left: 92, size: "sm" }, // Mid-High-Right (Edge)
-              { top: 50, left: 12, size: "lg" }, // Mid-Left (Prominent)
-              { top: 52, left: 82, size: "lg" }, // Mid-Right (Prominent)
+              // Squeeze these outwards on mobile
+              { top: 35, left: 2, size: "sm", mobileHidden: false }, // Mid-High-Left (Edge)
+              { top: 38, left: 95, size: "sm", mobileHidden: false }, // Mid-High-Right (Edge)
+              { top: 50, left: 5, size: "lg", mobileHidden: false }, // Mid-Left (Prominent)
+              { top: 52, left: 88, size: "lg", mobileHidden: false }, // Mid-Right (Prominent)
 
               // --- LOWER ZONES (Avoiding Chat in Center) ---
-              { top: 68, left: 8, size: "md" }, // Low-Left
-              { top: 65, left: 88, size: "md" }, // Low-Right
-              { top: 82, left: 15, size: "sm" }, // Bottom-Left (Low)
-              { top: 78, left: 78, size: "sm" }, // Bottom-Right (Low)
+              { top: 68, left: 8, size: "md", mobileHidden: false }, // Low-Left
+              { top: 65, left: 88, size: "md", mobileHidden: false }, // Low-Right
+              { top: 82, left: 15, size: "sm", mobileHidden: true }, // Bottom-Left (Low) - Hidden on mobile
+              { top: 78, left: 78, size: "sm", mobileHidden: true }, // Bottom-Right (Low) - Hidden on mobile
               // Extra fillers if needed
-              { top: 28, left: 55, size: "xs" }, // Near Top-Right-Center (Small)
-              { top: 30, left: 35, size: "xs" }, // Near Top-Left-Center (Small)
+              { top: 28, left: 55, size: "xs", mobileHidden: true }, // Near Top-Right-Center (Small)
+              { top: 30, left: 35, size: "xs", mobileHidden: true }, // Near Top-Left-Center (Small)
             ];
 
             // Safety fallback if i goes out of bounds (though slice prevents it)
@@ -229,7 +229,7 @@ export function PortfolioInterface({ portfolio }: PortfolioInterfaceProps) {
 
             // Size variants
             const sizeClasses = {
-              lg: "text-base px-6 py-3 border-white/20 bg-white/10 z-10",
+              lg: "text-base px-6 py-3 border-white/20 bg-white/10 md:z-10 z-0", // z-0 on mobile
               md: "text-sm px-4 py-2 border-white/10 bg-white/5 z-0",
               sm: "text-xs px-3 py-1.5 border-white/5 bg-white/5 text-purple-200/60 -z-10",
               xs: "text-[10px] px-2 py-1 border-white/5 bg-white/5 text-purple-300/40 -z-20",
@@ -238,7 +238,7 @@ export function PortfolioInterface({ portfolio }: PortfolioInterfaceProps) {
             return (
               <div
                 key={i}
-                className="absolute flex items-center justify-center transition-all duration-1000 ease-out"
+                className={`absolute flex items-center justify-center transition-all duration-1000 ease-out flex`}
                 style={{
                   top: `${config.top}%`,
                   left: `${config.left}%`,
@@ -351,7 +351,7 @@ export function PortfolioInterface({ portfolio }: PortfolioInterfaceProps) {
         </div>
 
         {/* Interaction Button */}
-        <div className="z-10 relative">
+        <div className="z-10 relative mb-8">
           {!isConnected ? (
             <Button
               size="lg"
@@ -374,6 +374,18 @@ export function PortfolioInterface({ portfolio }: PortfolioInterfaceProps) {
               <MicOff className="w-8 h-8" />
             </Button>
           )}
+        </div>
+
+        {/* Mobile Static Traits List */}
+        <div className="md:hidden flex flex-wrap gap-2 justify-center px-6 mb-20 z-10 relative">
+          {traits.map((trait: string, i: number) => (
+            <div
+              key={i}
+              className="bg-white/5 border border-white/10 rounded-full px-3 py-1.5 text-xs text-purple-100/80 backdrop-blur-sm"
+            >
+              {trait}
+            </div>
+          ))}
         </div>
 
         {/* Real-time Transcription Overlay */}

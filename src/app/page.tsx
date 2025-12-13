@@ -16,7 +16,7 @@ export default function Home() {
         <div className="text-center max-w-3xl mx-auto space-y-8">
           <div className="flex items-center justify-center space-x-2 mb-8">
             <span className="px-3 py-1 rounded-full bg-white/10 border border-white/20 text-sm font-medium backdrop-blur-sm">
-              Hackathon Ready MVP
+              Mirror Vitae
             </span>
           </div>
 

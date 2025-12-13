@@ -168,20 +168,28 @@ export function InterviewChat({ onInterviewComplete }: InterviewChatProps) {
   };
 
   return (
-    <div className="flex h-[600px] w-full max-w-5xl mx-auto rounded-xl border border-gray-800 bg-black overflow-hidden shadow-2xl">
+    <div className="flex h-[80vh] lg:h-[600px] w-full max-w-5xl mx-auto rounded-xl border border-gray-800 bg-black overflow-hidden shadow-2xl flex-col lg:flex-row">
       {/* LEFT COLUMN: CHAT */}
-      <div className="flex-1 flex flex-col border-r border-gray-800">
+      <div className="flex-1 flex flex-col border-r-0 lg:border-r border-gray-800 h-full">
         {/* Header */}
-        <div className="p-4 border-b border-gray-800 bg-gray-900/50 flex justify-between items-center">
+        <div className="p-4 border-b border-gray-800 bg-gray-900/50 flex justify-between items-center shrink-0">
           <div className="flex items-center gap-2">
             <Sparkles className="w-5 h-5 text-purple-400" />
             <span className="font-medium text-white">Interview with Vitae</span>
+          </div>
+          {/* Mobile Progress Indicator */}
+          <div className="lg:hidden flex items-center gap-2 text-xs text-gray-400">
+            <span>{interviewState.progress}%</span>
+            <Progress
+              value={interviewState.progress}
+              className="w-16 h-1.5 bg-gray-800"
+            />
           </div>
         </div>
 
         {/* Messages */}
         <div
-          className="flex-1 overflow-y-auto p-4 space-y-4 custom-scrollbar"
+          className="flex-1 overflow-y-auto p-4 space-y-4 custom-scrollbar min-h-0"
           ref={scrollRef}
         >
           {messages.map((m) => (
@@ -214,7 +222,7 @@ export function InterviewChat({ onInterviewComplete }: InterviewChatProps) {
         </div>
 
         {/* Input */}
-        <div className="p-4 bg-gray-900/30 border-t border-gray-800">
+        <div className="p-4 bg-gray-900/30 border-t border-gray-800 shrink-0">
           <form onSubmit={handleSubmit} className="flex gap-2">
             <Input
               value={input}
@@ -233,8 +241,8 @@ export function InterviewChat({ onInterviewComplete }: InterviewChatProps) {
         </div>
       </div>
 
-      {/* RIGHT COLUMN: DASHBOARD */}
-      <div className="w-80 bg-gray-900/20 p-6 flex flex-col gap-8 overflow-y-auto text-left">
+      {/* RIGHT COLUMN: DASHBOARD (Hidden on mobile, visible on desktop) */}
+      <div className="hidden lg:flex w-80 bg-gray-900/20 p-6 flex-col gap-8 overflow-y-auto text-left h-full">
         {/* Progress Section */}
         <div className="space-y-3">
           <div className="flex justify-between items-center text-sm font-medium text-gray-300">
