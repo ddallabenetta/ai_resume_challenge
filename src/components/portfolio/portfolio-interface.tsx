@@ -71,9 +71,9 @@ export function PortfolioInterface({ portfolio }: PortfolioInterfaceProps) {
               prompt: portfolio.system_prompt,
             },
           },
-          tts: {
+          /* tts: {
             voiceId: portfolio.voice_id,
-          },
+          }, */
         },
       });
     } catch (e) {

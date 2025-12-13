@@ -65,6 +65,12 @@ export default function OnboardingPage() {
     }
   };
 
+  const handleVoiceSkip = () => {
+    setVoiceId(null);
+    setStep("photo");
+    setProgress(50);
+  };
+
   const handlePhotoSelected = async (file: File) => {
     setIsProcessing(true);
     const formData = new FormData();
@@ -88,6 +94,12 @@ export default function OnboardingPage() {
     } finally {
       setIsProcessing(false);
     }
+  };
+
+  const handlePhotoSkip = () => {
+    setPhotoUrl(null);
+    setStep("interview");
+    setProgress(70);
   };
 
   const handleInterviewComplete = async (history: Message[]) => {
@@ -178,14 +190,20 @@ export default function OnboardingPage() {
                   Registra un campione audio per dare la tua voce al gemello.
                 </p>
               </div>
-              <VoiceRecorder onRecordingComplete={handleVoiceComplete} />
+              <VoiceRecorder
+                onRecordingComplete={handleVoiceComplete}
+                onSkip={handleVoiceSkip}
+              />
             </div>
           )}
 
           {step === "photo" && (
             <div className="text-center space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
               <h1 className="text-3xl font-light">Carica Avatar</h1>
-              <PhotoUploader onPhotoSelected={handlePhotoSelected} />
+              <PhotoUploader
+                onPhotoSelected={handlePhotoSelected}
+                onSkip={handlePhotoSkip}
+              />
             </div>
           )}
 

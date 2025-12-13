@@ -3,10 +3,11 @@
 import { useState, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Mic, Square, RotateCcw, Upload } from "lucide-react";
+import { Mic, Square, RotateCcw, Upload, SkipForward } from "lucide-react";
 
 interface VoiceRecorderProps {
   onRecordingComplete: (blob: Blob) => void;
+  onSkip: () => void;
 }
 
 const SCRIPTS = [
@@ -17,7 +18,10 @@ const SCRIPTS = [
   "Non ho fallito. Ho scoperto 10.000 modi che non funzionano. La perseveranza è la mia forza più grande.",
 ];
 
-export function VoiceRecorder({ onRecordingComplete }: VoiceRecorderProps) {
+export function VoiceRecorder({
+  onRecordingComplete,
+  onSkip,
+}: VoiceRecorderProps) {
   const [isRecording, setIsRecording] = useState(false);
   const [recordingBlob, setRecordingBlob] = useState<Blob | null>(null);
   const [audioUrl, setAudioUrl] = useState<string | null>(null);
@@ -118,21 +122,30 @@ export function VoiceRecorder({ onRecordingComplete }: VoiceRecorderProps) {
           {formatTime(timer)}
         </div>
 
-        <div className="flex gap-4">
+        <div className="flex flex-col gap-4 w-full">
           {!isRecording && !audioUrl && (
-            <Button
-              onClick={startRecording}
-              className="bg-white text-black hover:bg-gray-200"
-            >
-              <Mic className="mr-2 h-4 w-4" /> Inizia Registrazione
-            </Button>
+            <div className="flex gap-2 justify-center w-full">
+              <Button
+                variant="ghost"
+                onClick={onSkip}
+                className="text-gray-500 hover:text-white hover:bg-transparent"
+              >
+                <SkipForward className="mr-2 h-4 w-4" /> Salta
+              </Button>
+              <Button
+                onClick={startRecording}
+                className="bg-white text-black hover:bg-gray-200"
+              >
+                <Mic className="mr-2 h-4 w-4" /> Inizia Registrazione
+              </Button>
+            </div>
           )}
 
           {isRecording && (
             <Button
               onClick={stopRecording}
               variant="destructive"
-              className="animate-pulse"
+              className="animate-pulse w-full"
             >
               <Square className="mr-2 h-4 w-4" /> Stop Registrazione
             </Button>

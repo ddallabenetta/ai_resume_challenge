@@ -3,14 +3,15 @@
 import { useState, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Upload, Image as ImageIcon, Check } from "lucide-react";
+import { Upload, Image as ImageIcon, Check, SkipForward } from "lucide-react";
 import Image from "next/image";
 
 interface PhotoUploaderProps {
   onPhotoSelected: (file: File) => void;
+  onSkip: () => void;
 }
 
-export function PhotoUploader({ onPhotoSelected }: PhotoUploaderProps) {
+export function PhotoUploader({ onPhotoSelected, onSkip }: PhotoUploaderProps) {
   const [preview, setPreview] = useState<string | null>(null);
   const [file, setFile] = useState<File | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -66,12 +67,20 @@ export function PhotoUploader({ onPhotoSelected }: PhotoUploaderProps) {
           onChange={handleFileChange}
         />
 
-        {preview && (
+        {preview ? (
           <Button
             onClick={handleConfirm}
             className="w-full bg-purple-600 hover:bg-purple-700"
           >
             <Check className="mr-2 h-4 w-4" /> Va bene così
+          </Button>
+        ) : (
+          <Button
+            variant="ghost"
+            onClick={onSkip}
+            className="text-gray-500 hover:text-white hover:bg-transparent"
+          >
+            <SkipForward className="mr-2 h-4 w-4" /> Salta
           </Button>
         )}
 
