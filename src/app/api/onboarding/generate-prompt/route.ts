@@ -55,7 +55,7 @@ Dati Personali Professionista:
     
     NOTA:
     - "jobTitle": Estrai il job title professionale dall'intervista.
-    - "traits": Estrai 5 aggettivi o brevi parole chiave (max 2 parole) che descrivono le personalità/skills emerse.`;
+    - "traits": Estrai fino a 10 aggettivi o brevi parole chiave che descrivono le personalità/skills emerse, includendo anche valori concreti come "sviluppatore da 3 anni".`;
 
         const response = await anthropic.messages.create({
             model: 'claude-haiku-4-5-20251001',
