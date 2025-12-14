@@ -72,14 +72,19 @@ Il progetto è stato costruito interamente con un approccio "vibe coding", utili
 - **Metriche**: PostHog per il tracking delle metriche in fase di onboarding e di utilizzo dei portfolio.
 - **Deploy**: Vercel per un deploy veloce e scalabile.
 
-### 7.3. Difficoltà incontrate
+### 7.3 Metriche raccolte
+
+- **Onboarding**: Vengono tracciati gli step di onboarding completati da ogni utente e la generazione del system prompt per il gemello virtuale.
+- **Portfolio**: Viene tracciato il numero di conversazioni avvenute all'intero dei portfolio.
+
+### 7.4. Difficoltà incontrate
 
 Durante lo sviluppo del progetto sono state incontrate diverse difficoltà:
 
 - **Conversazione con il gemello virtuale**: Non è stato semplice arrivare alla generazione finale del sysyem prompt per i gemelli virtuali (tutt'ora non perfetto), come sempre è stato difficile capire come arginare il contesto dell'agente per evitare che inventi risposte o esca dal suo ruolo.
 - **Salvataggio e utilizzo dei dati utente**: Per me è stato il primo utilizzo dei database KV di vercel, l'implementazione non è stata immediata
 
-### 7.4 Funzionalità mancanti
+### 7.5 Funzionalità mancanti
 
 L'idea iniziale era quella di generare un avatar 2d / 3d partendo dalla foto profilo degli utenti in fase di onboarding. Questo avatar sarebbe quindi dovuto essere espressivo (e con lip sync) durante una conversazione all'interno del portfolio.
 A causa dei limiti di tempo questa idea è stata quindi ridimensionata mantenendo solo la foto statica degli utenti.
