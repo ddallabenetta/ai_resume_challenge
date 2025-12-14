@@ -21,7 +21,7 @@ export async function POST(req: Request) {
             city,
             socials,
             traits: traits || [], // Save traits
-            photo_url: photo_url || '/placeholder-avatar.png',
+            photo_url: photo_url || undefined,
             voice_id: voice_id || 'default', // Fallback
             system_prompt,
             conversation_history: history,
