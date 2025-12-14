@@ -12,6 +12,7 @@ import {
   Github,
   Linkedin,
   Instagram,
+  User,
 } from "lucide-react";
 import { useConversation } from "@elevenlabs/react";
 import { format } from "date-fns";
@@ -376,11 +377,17 @@ export function PortfolioInterface({ portfolio }: PortfolioInterfaceProps) {
               filter: `brightness(${1 + volume * 0.3})`, // Increased brightness flare
             }}
           >
-            <img
-              src={portfolio.photo_url}
-              alt={portfolio.name}
-              className="w-full h-full object-cover"
-            />
+            {portfolio.photo_url ? (
+              <img
+                src={portfolio.photo_url}
+                alt={portfolio.name}
+                className="w-full h-full object-cover"
+              />
+            ) : (
+              <div className="w-full h-full flex items-center justify-center bg-white/5">
+                <User className="w-20 h-20 text-white/50" />
+              </div>
+            )}
           </div>
 
           {/* Status Rings */}
