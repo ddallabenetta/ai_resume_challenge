@@ -48,11 +48,13 @@ Dati Personali Professionista:
     Rispondi SOLAMENTE con un oggetto JSON valido:
     {
       "name": "Nome",
+      "jobTitle": "Job Title (es. Software Engineer, Marketing Specialist)",
       "system_prompt": "Il testo del prompt generato...",
       "traits": ["Aggettivo1", "Aggettivo2", "Aggettivo3", "Aggettivo4", "Aggettivo5"]
     }
     
     NOTA:
+    - "jobTitle": Estrai il job title professionale dall'intervista.
     - "traits": Estrai 5 aggettivi o brevi parole chiave (max 2 parole) che descrivono le personalità/skills emerse.`;
 
         const response = await anthropic.messages.create({

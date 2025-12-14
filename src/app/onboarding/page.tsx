@@ -133,6 +133,7 @@ export default function OnboardingPage() {
         method: "POST",
         body: JSON.stringify({
           name: personalInfo?.fullName || promptData.name || "Utente", // Prefer form data
+          jobTitle: promptData.jobTitle,
           birthDate: personalInfo?.birthDate,
           city: personalInfo?.city,
           socials: personalInfo?.socials,

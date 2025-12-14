@@ -158,6 +158,11 @@ export function PortfolioInterface({ portfolio }: PortfolioInterfaceProps) {
             <h1 className="text-4xl md:text-5xl font-bold text-white mb-2">
               {portfolio.name}
             </h1>
+            {portfolio.jobTitle && (
+              <p className="text-xl text-purple-400 font-light mb-2">
+                {portfolio.jobTitle}
+              </p>
+            )}
             <div className="h-1 w-20 bg-purple-500 rounded-full"></div>
           </div>
 
