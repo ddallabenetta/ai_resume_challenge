@@ -3,6 +3,7 @@
 import { useState, useCallback, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { usePostHog } from "posthog-js/react";
 import {
   Mic,
   MicOff,
@@ -30,6 +31,7 @@ export function PortfolioInterface({ portfolio }: PortfolioInterfaceProps) {
   const [error, setError] = useState<string | null>(null);
   const [messages, setMessages] = useState<Message[]>([]);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const posthog = usePostHog();
 
   const conversation = useConversation({
     onConnect: () => console.log("Connected to ElevenLabs"),
@@ -39,6 +41,14 @@ export function PortfolioInterface({ portfolio }: PortfolioInterfaceProps) {
       const role = message.source === "user" ? "user" : "ai";
       if (text) {
         setMessages((prev) => [...prev, { role, text }]);
+
+        // Track only user messages to avoid spam or double counting
+        if (role === "user") {
+          posthog?.capture("portfolio_chat_message", {
+            portfolio_id: portfolio.slug,
+            length: text.length,
+          });
+        }
       }
     },
     onError: (e) => {
@@ -60,6 +70,12 @@ export function PortfolioInterface({ portfolio }: PortfolioInterfaceProps) {
   const startConversation = useCallback(async () => {
     try {
       setError(null);
+
+      // Track start
+      posthog?.capture("portfolio_chat_started", {
+        portfolio_id: portfolio.slug,
+      });
+
       const res = await fetch(`/api/portfolio/${portfolio.slug}/token`);
       const data = await res.json();
 

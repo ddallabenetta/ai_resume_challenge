@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { usePostHog } from "posthog-js/react";
 import { VoiceRecorder } from "@/components/onboarding/voice-recorder";
 import { PhotoUploader } from "@/components/onboarding/photo-uploader";
 import { InterviewChat, Message } from "@/components/onboarding/interview-chat";
@@ -23,6 +24,7 @@ export default function OnboardingPage() {
   const [step, setStep] = useState<Step>("personal-info");
   const [progress, setProgress] = useState(10);
   const router = useRouter();
+  const posthog = usePostHog();
 
   // Data Store
   const [personalInfo, setPersonalInfo] = useState<PersonalInfoData | null>(
@@ -36,6 +38,10 @@ export default function OnboardingPage() {
     setPersonalInfo(data);
     setStep("voice");
     setProgress(30);
+    posthog?.capture("onboarding_step_completed", {
+      step_number: 1,
+      step_name: "personal-info",
+    });
   };
 
   const handleVoiceComplete = async (result: Blob | string) => {
@@ -44,6 +50,15 @@ export default function OnboardingPage() {
       setVoiceId(result);
       setStep("photo");
       setProgress(50);
+      posthog?.capture("onboarding_step_completed", {
+        step_number: 2,
+        step_name: "voice",
+        method: "default",
+      });
+      posthog?.capture("voice_selected", {
+        method: "default",
+        voice_id: result,
+      });
       return;
     }
 
@@ -62,6 +77,12 @@ export default function OnboardingPage() {
         setVoiceId(data.voice_id);
         setStep("photo");
         setProgress(50);
+        posthog?.capture("onboarding_step_completed", {
+          step_number: 2,
+          step_name: "voice",
+          method: "cloned",
+        });
+        posthog?.capture("voice_cloned", { method: "cloned" });
       } else {
         console.error("Voice upload failed", data);
         alert("Errore caricamento voce: " + (data.error || "Sconosciuto"));
@@ -78,6 +99,11 @@ export default function OnboardingPage() {
     setVoiceId(null);
     setStep("photo");
     setProgress(50);
+    posthog?.capture("onboarding_step_completed", {
+      step_number: 2,
+      step_name: "voice",
+      skipped: true,
+    });
   };
 
   const handlePhotoSelected = async (file: File) => {
@@ -95,6 +121,10 @@ export default function OnboardingPage() {
         setPhotoUrl(data.url);
         setStep("interview");
         setProgress(70);
+        posthog?.capture("onboarding_step_completed", {
+          step_number: 3,
+          step_name: "photo",
+        });
       } else {
         alert("Errore caricamento foto");
       }
@@ -109,12 +139,21 @@ export default function OnboardingPage() {
     setPhotoUrl(null);
     setStep("interview");
     setProgress(70);
+    posthog?.capture("onboarding_step_completed", {
+      step_number: 3,
+      step_name: "photo",
+      skipped: true,
+    });
   };
 
   const handleInterviewComplete = async (history: Message[]) => {
     setStep("success");
     setProgress(90);
     setIsProcessing(true);
+    posthog?.capture("onboarding_step_completed", {
+      step_number: 4,
+      step_name: "interview",
+    });
 
     try {
       // 1. Generate Prompt & Extract Name (keeping this for now, but we have the name)
@@ -127,6 +166,10 @@ export default function OnboardingPage() {
         }),
       });
       const promptData = await promptRes.json();
+
+      if (promptData.system_prompt) {
+        posthog?.capture("ai_prompt_generated");
+      }
 
       // 2. Create Portfolio
       const createRes = await fetch("/api/onboarding/create-portfolio", {
@@ -148,6 +191,7 @@ export default function OnboardingPage() {
       const createData = await createRes.json();
 
       if (createData.slug) {
+        posthog?.capture("portfolio_created", { slug: createData.slug });
         setProgress(100);
         setTimeout(() => {
           router.push(`/portfolio/${createData.slug}`);

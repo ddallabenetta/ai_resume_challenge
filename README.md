@@ -28,6 +28,12 @@ Mirror Vitae trasforma il CV statico in un'esperienza interattiva. I professioni
 - **Personalità Adattiva**: Il sistema genera un prompt dinamico basato sull'intervista per riflettere accuratamente il tono e le competenze dell'utente.
 - **Esperienza Localizzata**: Interfaccia e interazioni completamente localizzate in italiano.
 
+### 3. Analytics Avanzate
+
+- **Product Intelligence**: Integrazione con PostHog per tracciare il comportamento degli utenti.
+- **Eventi Custom**: Monitoraggio dettagliato di onboarding, generazione prompt e interazioni nel portfolio.
+- **Session Replay**: Possibilità di rivedere le sessioni utente per migliorare l'UX.
+
 ## 🛠️ Stack Tecnologico
 
 - **Framework**: Next.js 16 (App Router)
@@ -35,6 +41,7 @@ Mirror Vitae trasforma il CV statico in un'esperienza interattiva. I professioni
 - **UI**: Tailwind CSS + shadcn/ui
 - **AI Intelligence**: Anthropic Claude 4.5 Haiku per la generazione di prompt e la gestione delle conversazioni.
 - **Audio Engine**: ElevenLabs API per la sintesi vocale e il voice cloning.
+- **Analytics**: PostHog (Product Analytics).
 - **Data & Storage**: Vercel KV (Database Sessioni/Stato) + Vercel Blob (Media Assets).
 
 ## 📦 Installazione e Avvio
@@ -42,7 +49,7 @@ Mirror Vitae trasforma il CV statico in un'esperienza interattiva. I professioni
 ### Prerequisiti
 
 - Node.js 20+
-- Account (e chiavi API) per: Anthropic, ElevenLabs, Vercel.
+- Account (e chiavi API) per: Anthropic, ElevenLabs, Vercel, PostHog.
 - **Vercel Blob**: Creare uno store Blob su Vercel per il salvataggio degli avatar.
 - **Vercel KV (Redis)**: Creare un database Redis su Vercel per memorizzare i dati degli utenti.
 - **Agente ElevenLabs Converazionale**: È necessario configurare un agente su ElevenLabs con i permessi di "Override" abilitati per:
@@ -77,6 +84,10 @@ Mirror Vitae trasforma il CV statico in un'esperienza interattiva. I professioni
     # Vercel Storage
     REDIS_URL=...
     BLOB_READ_WRITE_TOKEN=...
+
+    # PostHog Analytics
+    NEXT_PUBLIC_POSTHOG_KEY=phc_...
+    NEXT_PUBLIC_POSTHOG_HOST=https://eu.i.posthog.com
     ```
 
 4.  **Avvia il server di sviluppo**:
